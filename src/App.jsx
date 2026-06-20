@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+// 1. Cambiamos GoogleGenerativeAI por GoogleGenAI
+import { GoogleGenAI } from '@google/generative-ai';
 import { CONFIG } from './config';
 import { 
   Utensils, Sparkles, FileText, TrendingUp, 
@@ -22,8 +23,9 @@ export default function App() {
 
     setLoading(true);
     try {
-      const genAI = new GoogleGenerativeAI(CONFIG.GEMINI_API_KEY);
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      // 2. Usamos la nueva clase estandarizada que rutea bien a v1beta
+      const ai = new GoogleGenAI({ apiKey: CONFIG.GEMINI_API_KEY });
+      const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
       
       const contextPrompt = `Actúa como un experto asesor de catering y buffet para "Marita Buffet". Responde la siguiente consulta de manera profesional, estructurada y enfocada en rentabilidad: ${prompt}`;
       
@@ -39,61 +41,61 @@ export default function App() {
   };
 
   return (
-    <div class="min-h-screen bg-slate-50 flex">
+    <div className="min-h-screen bg-slate-50 flex">
       {/* Sidebar */}
-      <aside class="w-64 bg-slate-900 text-white flex flex-col justify-between p-4">
+      <aside className="w-64 bg-slate-900 text-white flex flex-col justify-between p-4">
         <div>
-          <div class="flex items-center gap-3 mb-8 px-2">
-            <Utensils class="text-amber-400 w-8 h-8" />
+          <div className="flex items-center gap-3 mb-8 px-2">
+            <Utensils className="text-amber-400 w-8 h-8" />
             <div>
-              <h1 class="font-bold text-lg leading-none">Marita Buffet</h1>
-              <span class="text-xs text-slate-400">Panel de Gestión</span>
+              <h1 className="font-bold text-lg leading-none">Marita Buffet</h1>
+              <span className="text-xs text-slate-400">Panel de Gestión</span>
             </div>
           </div>
 
-          <nav class="space-y-1">
+          <nav className="space-y-1">
             <button 
               onClick={() => setActiveTab('ia')}
-              class={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${activeTab === 'ia' ? 'bg-amber-500 text-slate-900' : 'text-slate-300 hover:bg-slate-800'}`}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${activeTab === 'ia' ? 'bg-amber-500 text-slate-900' : 'text-slate-300 hover:bg-slate-800'}`}
             >
-              <Sparkles class="w-4 h-4" /> Asistente de IA (Gemini)
+              <Sparkles className="w-4 h-4" /> Asistente de IA (Gemini)
             </button>
             <button 
               onClick={() => setActiveTab('cotizador')}
-              class={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${activeTab === 'cotizador' ? 'bg-amber-500 text-slate-900' : 'text-slate-300 hover:bg-slate-800'}`}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${activeTab === 'cotizador' ? 'bg-amber-500 text-slate-900' : 'text-slate-300 hover:bg-slate-800'}`}
             >
-              <DollarSign class="w-4 h-4" /> Cotizador Express
+              <DollarSign className="w-4 h-4" /> Cotizador Express
             </button>
           </nav>
         </div>
         
-        <div class="border-t border-slate-800 pt-4 px-2 text-xs text-slate-400">
+        <div className="border-t border-slate-800 pt-4 px-2 text-xs text-slate-400">
           Versión v0.1.0 • Listo para GitHub
         </div>
       </aside>
 
       {/* Main Content */}
-      <main class="flex-1 p-8 overflow-y-auto">
+      <main className="flex-1 p-8 overflow-y-auto">
         {activeTab === 'ia' ? (
-          <div class="max-w-4xl mx-auto space-y-6">
+          <div className="max-w-4xl mx-auto space-y-6">
             <div>
-              <h2 class="text-2xl font-bold text-slate-900">Asistente Inteligente</h2>
-              <p class="text-sm text-slate-500">Genera menús, calcula insumos o planifica la logística con Gemini.</p>
+              <h2 className="text-2xl font-bold text-slate-900">Asistente Inteligente</h2>
+              <p className="text-sm text-slate-500">Genera menús, calcula insumos o planifica la logística con Gemini.</p>
             </div>
 
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-4">
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-4">
               <textarea
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 placeholder="Ej: Necesito un menú criollo para 50 personas, detalla los ingredientes necesarios y el margen sugerido..."
-                class="w-full h-32 p-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm resize-none"
+                className="w-full h-32 p-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm resize-none"
               />
               <button
                 onClick={generateAIResponse}
                 disabled={loading}
-                class="bg-slate-950 text-white font-medium text-sm px-5 py-2.5 rounded-lg hover:bg-slate-800 transition-colors inline-flex items-center gap-2 disabled:opacity-50"
+                className="bg-slate-950 text-white font-medium text-sm px-5 py-2.5 rounded-lg hover:bg-slate-800 transition-colors inline-flex items-center gap-2 disabled:opacity-50"
               >
-                {loading ? 'Procesando...' : 'Consultar a la IA'} <Sparkles class="w-4 h-4" />
+                {loading ? 'Procesando...' : 'Consultar a la IA'} <Sparkles className="w-4 h-4" />
               </button>
             </div>
 
@@ -109,11 +111,10 @@ export default function App() {
             )}
           </div>
         ) : (
-          <div class="max-w-4xl mx-auto">
-            <h2 class="text-2xl font-bold text-slate-900 mb-6">Cotizador Rápido de Eventos</h2>
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-              <p class="text-sm text-slate-500">Módulo de cálculo base de presupuestos y costos fijos/variables.</p>
-              {/* Aquí se pueden añadir las utilidades locales de cálculo */}
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">Cotizador Rápido de Eventos</h2>
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+              <p className="text-sm text-slate-500">Módulo de cálculo base de presupuestos y costos fijos/variables.</p>
             </div>
           </div>
         )}
