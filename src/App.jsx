@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-// 1. Cambiamos GoogleGenerativeAI por GoogleGenAI
-import { GoogleGenAI } from '@google/generative-ai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { CONFIG } from './config';
 import { 
-  Utensils, Sparkles, FileText, TrendingUp, 
-  Plus, Trash2, DollarSign, Calendar, MessageSquare 
+  Utensils, Sparkles, DollarSign, MessageSquare 
 } from 'lucide-react';
 
 export default function App() {
@@ -13,7 +11,6 @@ export default function App() {
   const [iaResponse, setIaResponse] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Inicializar Gemini de manera segura
   const generateAIResponse = async () => {
     if (!prompt.trim()) return;
     if (!CONFIG.GEMINI_API_KEY || CONFIG.GEMINI_API_KEY === "TU_API_KEY_DE_GEMINI_AQUI") {
@@ -23,9 +20,9 @@ export default function App() {
 
     setLoading(true);
     try {
-      // 2. Usamos la nueva clase estandarizada que rutea bien a v1beta
-      const ai = new GoogleGenAI({ apiKey: CONFIG.GEMINI_API_KEY });
-      const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
+      // Inicialización compatible con tu versión de librería
+      const genAI = new GoogleGenerativeAI(CONFIG.GEMINI_API_KEY);
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
       
       const contextPrompt = `Actúa como un experto asesor de catering y buffet para "Marita Buffet". Responde la siguiente consulta de manera profesional, estructurada y enfocada en rentabilidad: ${prompt}`;
       
@@ -42,7 +39,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex">
-      {/* Sidebar */}
       <aside className="w-64 bg-slate-900 text-white flex flex-col justify-between p-4">
         <div>
           <div className="flex items-center gap-3 mb-8 px-2">
@@ -74,7 +70,6 @@ export default function App() {
         </div>
       </aside>
 
-      {/* Main Content */}
       <main className="flex-1 p-8 overflow-y-auto">
         {activeTab === 'ia' ? (
           <div className="max-w-4xl mx-auto space-y-6">
@@ -100,11 +95,11 @@ export default function App() {
             </div>
 
             {iaResponse && (
-              <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                <h3 class="font-semibold text-slate-900 mb-3 flex items-center gap-2">
-                  <MessageSquare class="w-4 h-4 text-amber-500" /> Propuesta Generada
+              <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h3 className="font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                  <MessageSquare className="w-4 h-4 text-amber-500" /> Propuesta Generada
                 </h3>
-                <div class="text-sm text-slate-700 whitespace-pre-line leading-relaxed bg-slate-50 p-4 rounded-lg border border-slate-100">
+                <div className="text-sm text-slate-700 whitespace-pre-line leading-relaxed bg-slate-50 p-4 rounded-lg border border-slate-100">
                   {iaResponse}
                 </div>
               </div>
